@@ -40,6 +40,8 @@ const BlogEditor = () => {
     specialFeature2: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleInputChange = (field: keyof BlogFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -56,12 +58,12 @@ const BlogEditor = () => {
   };
 
   const handleSave = async (publish: boolean = false) => {
-    // Validate required fields
     if (!formData.domain || !formData.overview || !formData.price) {
       toast.error("Please fill in all required fields");
       return;
     }
 
+    setIsLoading(true);
     try {
       const { data, error } = await supabase.from("domain_listings").insert({
         domain: formData.domain,
@@ -82,7 +84,6 @@ const BlogEditor = () => {
 
       toast.success(publish ? "Domain listing published!" : "Draft saved successfully!");
       
-      // Reset form
       setFormData({
         domain: "",
         overview: "",
@@ -100,30 +101,34 @@ const BlogEditor = () => {
     } catch (error) {
       console.error("Error saving domain listing:", error);
       toast.error("Failed to save domain listing");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const wordCount = formData.miniBlog.trim().split(/\s+/).filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Domain Editor</h1>
-          <p className="text-muted-foreground">Create and publish domain listings</p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10 py-20 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-16 text-center">
+          <h1 className="text-7xl font-black mb-4 text-foreground font-spartan tracking-tight bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-pulse">
+            Domain Publisher
+          </h1>
+          <p className="text-xl text-muted-foreground font-poppins font-light">Craft premium domain listings with precision</p>
         </div>
 
-        <Card className="p-8 space-y-8">
+        <Card className="p-12 space-y-10 shadow-2xl border-2 backdrop-blur-sm bg-card/95">
           {/* Basic Information */}
           <section className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">Basic Information</h2>
-              <p className="text-sm text-muted-foreground">Primary domain details</p>
+              <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Basic Information</h2>
+              <p className="text-sm text-muted-foreground font-poppins">Primary domain details</p>
             </div>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="domain" className="text-base font-semibold">
+                <Label htmlFor="domain" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                   Domain
                 </Label>
                 <Input
@@ -131,12 +136,12 @@ const BlogEditor = () => {
                   placeholder="example.com"
                   value={formData.domain}
                   onChange={(e) => handleInputChange("domain", e.target.value)}
-                  className="text-lg"
+                  className="text-lg font-poppins"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="overview" className="text-base font-semibold">
+                <Label htmlFor="overview" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                   One Line Overview
                 </Label>
                 <Input
@@ -144,12 +149,13 @@ const BlogEditor = () => {
                   placeholder="A compelling description of the domain"
                   value={formData.overview}
                   onChange={(e) => handleInputChange("overview", e.target.value)}
+                  className="font-poppins"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="price" className="text-base font-semibold">
+                  <Label htmlFor="price" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                     Price
                   </Label>
                   <Input
@@ -157,11 +163,12 @@ const BlogEditor = () => {
                     placeholder="$10,000"
                     value={formData.price}
                     onChange={(e) => handleInputChange("price", e.target.value)}
+                    className="font-poppins"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="domainAge" className="text-base font-semibold">
+                  <Label htmlFor="domainAge" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                     Domain Age (years)
                   </Label>
                   <Input
@@ -170,11 +177,12 @@ const BlogEditor = () => {
                     placeholder="5"
                     value={formData.domainAge}
                     onChange={(e) => handleInputChange("domainAge", e.target.value)}
+                    className="font-poppins"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="monthlyVisits" className="text-base font-semibold">
+                  <Label htmlFor="monthlyVisits" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                     Monthly Visits
                   </Label>
                   <Input
@@ -183,12 +191,13 @@ const BlogEditor = () => {
                     placeholder="50000"
                     value={formData.monthlyVisits}
                     onChange={(e) => handleInputChange("monthlyVisits", e.target.value)}
+                    className="font-poppins"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="seoRating" className="text-base font-semibold">
+                <Label htmlFor="seoRating" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                   SEO Rating
                 </Label>
                 <Input
@@ -196,6 +205,7 @@ const BlogEditor = () => {
                   placeholder="8.5/10"
                   value={formData.seoRating}
                   onChange={(e) => handleInputChange("seoRating", e.target.value)}
+                  className="font-poppins"
                 />
               </div>
             </div>
@@ -206,15 +216,15 @@ const BlogEditor = () => {
           {/* About Section */}
           <section className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">About</h2>
-              <p className="text-sm text-muted-foreground">3-line description</p>
+              <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">About</h2>
+              <p className="text-sm text-muted-foreground font-poppins">3-line description</p>
             </div>
 
             <Textarea
               placeholder="Enter a compelling 3-line description about this domain..."
               value={formData.about}
               onChange={(e) => handleInputChange("about", e.target.value)}
-              className="min-h-[100px] resize-none"
+              className="min-h-[100px] resize-none font-poppins"
             />
           </section>
 
@@ -223,8 +233,8 @@ const BlogEditor = () => {
           {/* Perfect For */}
           <section className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">Perfect For</h2>
-              <p className="text-sm text-muted-foreground">5 bullet points</p>
+              <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Perfect For</h2>
+              <p className="text-sm text-muted-foreground font-poppins">5 bullet points</p>
             </div>
 
             <div className="space-y-3">
@@ -235,6 +245,7 @@ const BlogEditor = () => {
                     placeholder={`Point ${index + 1}`}
                     value={point}
                     onChange={(e) => handleArrayChange("perfectFor", index, e.target.value)}
+                    className="font-poppins"
                   />
                 </div>
               ))}
@@ -246,8 +257,8 @@ const BlogEditor = () => {
           {/* Market Opportunity */}
           <section className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">Market Opportunity</h2>
-              <p className="text-sm text-muted-foreground">5 bullet points</p>
+              <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Market Opportunity</h2>
+              <p className="text-sm text-muted-foreground font-poppins">5 bullet points</p>
             </div>
 
             <div className="space-y-3">
@@ -260,6 +271,7 @@ const BlogEditor = () => {
                     onChange={(e) =>
                       handleArrayChange("marketOpportunity", index, e.target.value)
                     }
+                    className="font-poppins"
                   />
                 </div>
               ))}
@@ -272,10 +284,10 @@ const BlogEditor = () => {
           <section className="space-y-6">
             <div className="flex justify-between items-end">
               <div>
-                <h2 className="text-2xl font-bold text-foreground mb-1">Mini Blog Content</h2>
-                <p className="text-sm text-muted-foreground">Maximum 300 words</p>
+                <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Mini Blog Content</h2>
+                <p className="text-sm text-muted-foreground font-poppins">Maximum 300 words</p>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground font-poppins">
                 {wordCount}/300 words
               </p>
             </div>
@@ -284,7 +296,7 @@ const BlogEditor = () => {
               placeholder="Write your mini blog content here..."
               value={formData.miniBlog}
               onChange={(e) => handleInputChange("miniBlog", e.target.value)}
-              className="min-h-[200px]"
+              className="min-h-[200px] font-poppins"
             />
           </section>
 
@@ -293,13 +305,13 @@ const BlogEditor = () => {
           {/* Special Features */}
           <section className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">Special Features</h2>
-              <p className="text-sm text-muted-foreground">Maximum 50 words each</p>
+              <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Special Features</h2>
+              <p className="text-sm text-muted-foreground font-poppins">Maximum 50 words each</p>
             </div>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="feature1" className="text-base font-semibold">
+                <Label htmlFor="feature1" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                   Special Feature 1
                 </Label>
                 <Textarea
@@ -307,15 +319,15 @@ const BlogEditor = () => {
                   placeholder="Describe the first special feature..."
                   value={formData.specialFeature1}
                   onChange={(e) => handleInputChange("specialFeature1", e.target.value)}
-                  className="min-h-[100px] resize-none"
+                  className="min-h-[100px] resize-none font-poppins"
                 />
-                <p className="text-xs text-muted-foreground text-right">
+                <p className="text-xs text-muted-foreground text-right font-poppins">
                   {formData.specialFeature1.trim().split(/\s+/).filter(Boolean).length}/50 words
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="feature2" className="text-base font-semibold">
+                <Label htmlFor="feature2" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
                   Special Feature 2
                 </Label>
                 <Textarea
@@ -323,9 +335,9 @@ const BlogEditor = () => {
                   placeholder="Describe the second special feature..."
                   value={formData.specialFeature2}
                   onChange={(e) => handleInputChange("specialFeature2", e.target.value)}
-                  className="min-h-[100px] resize-none"
+                  className="min-h-[100px] resize-none font-poppins"
                 />
-                <p className="text-xs text-muted-foreground text-right">
+                <p className="text-xs text-muted-foreground text-right font-poppins">
                   {formData.specialFeature2.trim().split(/\s+/).filter(Boolean).length}/50 words
                 </p>
               </div>
@@ -335,14 +347,25 @@ const BlogEditor = () => {
           <Separator />
 
           {/* Action Buttons */}
-          <div className="flex gap-4 pt-4">
-            <Button onClick={() => handleSave(false)} className="flex-1" size="lg">
+          <div className="flex gap-6 pt-8">
+            <Button 
+              onClick={() => handleSave(false)} 
+              className="flex-1 h-14 text-lg font-montserrat font-semibold tracking-wide hover:scale-105 transition-transform" 
+              size="lg"
+              variant="outline"
+              disabled={isLoading}
+            >
               <Save className="mr-2 h-5 w-5" />
-              Save Draft
+              {isLoading ? "Saving..." : "Save Draft"}
             </Button>
-            <Button onClick={() => handleSave(true)} variant="secondary" className="flex-1" size="lg">
+            <Button 
+              onClick={() => handleSave(true)} 
+              className="flex-1 h-14 text-lg font-montserrat font-bold tracking-wide hover:scale-105 transition-transform shadow-lg" 
+              size="lg"
+              disabled={isLoading}
+            >
               <PlusCircle className="mr-2 h-5 w-5" />
-              Publish
+              {isLoading ? "Publishing..." : "Publish"}
             </Button>
           </div>
         </Card>
