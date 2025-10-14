@@ -16,6 +16,8 @@ interface BlogFormData {
   domainAge: string;
   monthlyVisits: string;
   seoRating: string;
+  backlinkCounter: string;
+  screenshots: File[];
   about: string;
   perfectFor: string[];
   marketOpportunity: string[];
@@ -32,6 +34,8 @@ const BlogEditor = () => {
     domainAge: "",
     monthlyVisits: "",
     seoRating: "",
+    backlinkCounter: "",
+    screenshots: [],
     about: "",
     perfectFor: ["", "", "", "", ""],
     marketOpportunity: ["", "", "", "", ""],
@@ -57,6 +61,15 @@ const BlogEditor = () => {
     }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 2) {
+      toast.error("Maximum 2 screenshots allowed");
+      return;
+    }
+    setFormData((prev) => ({ ...prev, screenshots: files }));
+  };
+
   const handleSave = async (publish: boolean = false) => {
     if (!formData.domain || !formData.overview || !formData.price) {
       toast.error("Please fill in all required fields");
@@ -65,6 +78,27 @@ const BlogEditor = () => {
 
     setIsLoading(true);
     try {
+      // Upload screenshots to storage
+      const screenshotUrls: string[] = [];
+      
+      for (const file of formData.screenshots) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('screenshots')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('screenshots')
+          .getPublicUrl(filePath);
+
+        screenshotUrls.push(publicUrl);
+      }
+
       const { data, error } = await supabase.from("domain_listings").insert({
         domain: formData.domain,
         overview: formData.overview,
@@ -72,6 +106,8 @@ const BlogEditor = () => {
         domain_age: parseInt(formData.domainAge) || 0,
         monthly_visits: parseInt(formData.monthlyVisits) || 0,
         seo_rating: formData.seoRating,
+        backlink_counter: parseInt(formData.backlinkCounter) || 0,
+        screenshot_urls: screenshotUrls,
         about: formData.about,
         perfect_for: formData.perfectFor.filter((p) => p.trim() !== ""),
         market_opportunity: formData.marketOpportunity.filter((m) => m.trim() !== ""),
@@ -91,6 +127,8 @@ const BlogEditor = () => {
         domainAge: "",
         monthlyVisits: "",
         seoRating: "",
+        backlinkCounter: "",
+        screenshots: [],
         about: "",
         perfectFor: ["", "", "", "", ""],
         marketOpportunity: ["", "", "", "", ""],
@@ -207,6 +245,41 @@ const BlogEditor = () => {
                   onChange={(e) => handleInputChange("seoRating", e.target.value)}
                   className="font-poppins"
                 />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="backlinkCounter" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
+                  Backlink Counter
+                </Label>
+                <Input
+                  id="backlinkCounter"
+                  type="number"
+                  placeholder="Enter number of backlinks"
+                  value={formData.backlinkCounter}
+                  onChange={(e) => handleInputChange("backlinkCounter", e.target.value)}
+                  className="font-poppins"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="screenshots" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
+                  3rd Party Screenshots (Max 2)
+                </Label>
+                <Input
+                  id="screenshots"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileChange}
+                  className="font-poppins"
+                />
+                {formData.screenshots.length > 0 && (
+                  <p className="text-xs text-muted-foreground font-poppins">
+                    {formData.screenshots.length} file(s) selected
+                  </p>
+                )}
               </div>
             </div>
           </section>

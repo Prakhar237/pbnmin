@@ -17,6 +17,7 @@ export type Database = {
       domain_listings: {
         Row: {
           about: string
+          backlink_counter: number
           created_at: string
           domain: string
           domain_age: number
@@ -27,6 +28,7 @@ export type Database = {
           overview: string
           perfect_for: string[]
           price: string
+          screenshot_urls: string[]
           seo_rating: string
           special_feature_1: string
           special_feature_2: string
@@ -34,6 +36,7 @@ export type Database = {
         }
         Insert: {
           about: string
+          backlink_counter?: number
           created_at?: string
           domain: string
           domain_age: number
@@ -44,6 +47,7 @@ export type Database = {
           overview: string
           perfect_for?: string[]
           price: string
+          screenshot_urls?: string[]
           seo_rating: string
           special_feature_1: string
           special_feature_2: string
@@ -51,6 +55,7 @@ export type Database = {
         }
         Update: {
           about?: string
+          backlink_counter?: number
           created_at?: string
           domain?: string
           domain_age?: number
@@ -61,6 +66,7 @@ export type Database = {
           overview?: string
           perfect_for?: string[]
           price?: string
+          screenshot_urls?: string[]
           seo_rating?: string
           special_feature_1?: string
           special_feature_2?: string
