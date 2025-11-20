@@ -22,6 +22,7 @@ interface BlogFormData {
   perfectFor: string[];
   marketOpportunity: string[];
   miniBlog: string;
+  secondaryBlogTitle: string;
   secondaryBlog: string;
   specialFeature1: string;
   specialFeature2: string;
@@ -41,6 +42,7 @@ const BlogEditor = () => {
     perfectFor: ["", "", "", "", ""],
     marketOpportunity: ["", "", "", "", ""],
     miniBlog: "",
+    secondaryBlogTitle: "",
     secondaryBlog: "",
     specialFeature1: "",
     specialFeature2: "",
@@ -114,6 +116,7 @@ const BlogEditor = () => {
         perfect_for: formData.perfectFor.filter((p) => p.trim() !== ""),
         market_opportunity: formData.marketOpportunity.filter((m) => m.trim() !== ""),
         mini_blog: formData.miniBlog,
+        secondary_blog_title: formData.secondaryBlogTitle,
         secondary_blog: formData.secondaryBlog,
         special_feature_1: formData.specialFeature1,
         special_feature_2: formData.specialFeature2,
@@ -136,6 +139,7 @@ const BlogEditor = () => {
         perfectFor: ["", "", "", "", ""],
         marketOpportunity: ["", "", "", "", ""],
         miniBlog: "",
+        secondaryBlogTitle: "",
         secondaryBlog: "",
         specialFeature1: "",
         specialFeature2: "",
@@ -382,22 +386,34 @@ const BlogEditor = () => {
 
           {/* Secondary Blog Post */}
           <section className="space-y-6">
-            <div className="flex justify-between items-end">
+            <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Secondary Blog Post</h2>
+            
+            <div className="space-y-4">
               <div>
-                <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Secondary Blog Post</h2>
-                <p className="text-sm text-muted-foreground font-poppins">Maximum 300 words</p>
+                <Label className="text-sm font-medium text-foreground font-poppins">Title - Secondary blog post</Label>
+                <Input
+                  placeholder="Enter secondary blog post title..."
+                  value={formData.secondaryBlogTitle}
+                  onChange={(e) => handleInputChange("secondaryBlogTitle", e.target.value)}
+                  className="mt-2 font-poppins"
+                />
               </div>
-              <p className="text-sm text-muted-foreground font-poppins">
-                {secondaryBlogWordCount}/300 words
-              </p>
-            </div>
 
-            <Textarea
-              placeholder="Write your secondary blog post here..."
-              value={formData.secondaryBlog}
-              onChange={(e) => handleInputChange("secondaryBlog", e.target.value)}
-              className="min-h-[200px] font-poppins"
-            />
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <p className="text-sm text-muted-foreground font-poppins">Maximum 300 words</p>
+                  <p className="text-sm text-muted-foreground font-poppins">
+                    {secondaryBlogWordCount}/300 words
+                  </p>
+                </div>
+                <Textarea
+                  placeholder="Write your secondary blog post here..."
+                  value={formData.secondaryBlog}
+                  onChange={(e) => handleInputChange("secondaryBlog", e.target.value)}
+                  className="min-h-[200px] font-poppins"
+                />
+              </div>
+            </div>
           </section>
 
           <Separator />

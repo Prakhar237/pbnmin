@@ -30,6 +30,7 @@ export type Database = {
           price: string
           screenshot_urls: string[]
           secondary_blog: string
+          secondary_blog_title: string
           seo_rating: string
           special_feature_1: string
           special_feature_2: string
@@ -50,6 +51,7 @@ export type Database = {
           price: string
           screenshot_urls?: string[]
           secondary_blog?: string
+          secondary_blog_title?: string
           seo_rating: string
           special_feature_1: string
           special_feature_2: string
@@ -70,6 +72,7 @@ export type Database = {
           price?: string
           screenshot_urls?: string[]
           secondary_blog?: string
+          secondary_blog_title?: string
           seo_rating?: string
           special_feature_1?: string
           special_feature_2?: string
