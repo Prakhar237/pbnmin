@@ -22,6 +22,7 @@ interface BlogFormData {
   perfectFor: string[];
   marketOpportunity: string[];
   miniBlog: string;
+  secondaryBlog: string;
   specialFeature1: string;
   specialFeature2: string;
 }
@@ -40,6 +41,7 @@ const BlogEditor = () => {
     perfectFor: ["", "", "", "", ""],
     marketOpportunity: ["", "", "", "", ""],
     miniBlog: "",
+    secondaryBlog: "",
     specialFeature1: "",
     specialFeature2: "",
   });
@@ -112,6 +114,7 @@ const BlogEditor = () => {
         perfect_for: formData.perfectFor.filter((p) => p.trim() !== ""),
         market_opportunity: formData.marketOpportunity.filter((m) => m.trim() !== ""),
         mini_blog: formData.miniBlog,
+        secondary_blog: formData.secondaryBlog,
         special_feature_1: formData.specialFeature1,
         special_feature_2: formData.specialFeature2,
       });
@@ -133,6 +136,7 @@ const BlogEditor = () => {
         perfectFor: ["", "", "", "", ""],
         marketOpportunity: ["", "", "", "", ""],
         miniBlog: "",
+        secondaryBlog: "",
         specialFeature1: "",
         specialFeature2: "",
       });
@@ -145,6 +149,7 @@ const BlogEditor = () => {
   };
 
   const wordCount = formData.miniBlog.trim().split(/\s+/).filter(Boolean).length;
+  const secondaryBlogWordCount = formData.secondaryBlog.trim().split(/\s+/).filter(Boolean).length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10 py-20 px-4">
@@ -369,6 +374,28 @@ const BlogEditor = () => {
               placeholder="Write your mini blog content here..."
               value={formData.miniBlog}
               onChange={(e) => handleInputChange("miniBlog", e.target.value)}
+              className="min-h-[200px] font-poppins"
+            />
+          </section>
+
+          <Separator />
+
+          {/* Secondary Blog Post */}
+          <section className="space-y-6">
+            <div className="flex justify-between items-end">
+              <div>
+                <h2 className="text-3xl font-bold text-foreground mb-2 font-spartan border-b-2 border-primary/20 pb-3">Secondary Blog Post</h2>
+                <p className="text-sm text-muted-foreground font-poppins">Maximum 300 words</p>
+              </div>
+              <p className="text-sm text-muted-foreground font-poppins">
+                {secondaryBlogWordCount}/300 words
+              </p>
+            </div>
+
+            <Textarea
+              placeholder="Write your secondary blog post here..."
+              value={formData.secondaryBlog}
+              onChange={(e) => handleInputChange("secondaryBlog", e.target.value)}
               className="min-h-[200px] font-poppins"
             />
           </section>
