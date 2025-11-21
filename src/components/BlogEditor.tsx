@@ -75,8 +75,8 @@ const BlogEditor = () => {
   };
 
   const handleSave = async (publish: boolean = false) => {
-    if (!formData.domain || !formData.overview || !formData.price) {
-      toast.error("Please fill in all required fields");
+    if (!formData.domain) {
+      toast.error("Domain is required");
       return;
     }
 
@@ -176,7 +176,7 @@ const BlogEditor = () => {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="domain" className="font-montserrat font-semibold text-sm uppercase tracking-wide">
-                  Domain
+                  Domain <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="domain"
