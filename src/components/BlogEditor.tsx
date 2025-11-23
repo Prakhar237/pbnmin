@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle, Save } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -26,6 +27,7 @@ interface BlogFormData {
   secondaryBlog: string;
   specialFeature1: string;
   specialFeature2: string;
+  poweredByPromotionocean: boolean;
 }
 
 const BlogEditor = () => {
@@ -46,6 +48,7 @@ const BlogEditor = () => {
     secondaryBlog: "",
     specialFeature1: "",
     specialFeature2: "",
+    poweredByPromotionocean: false,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -120,6 +123,7 @@ const BlogEditor = () => {
         secondary_blog: formData.secondaryBlog,
         special_feature_1: formData.specialFeature1,
         special_feature_2: formData.specialFeature2,
+        powered_by_promotionocean: formData.poweredByPromotionocean,
       });
 
       if (error) throw error;
@@ -143,6 +147,7 @@ const BlogEditor = () => {
         secondaryBlog: "",
         specialFeature1: "",
         specialFeature2: "",
+        poweredByPromotionocean: false,
       });
     } catch (error) {
       console.error("Error saving domain listing:", error);
@@ -185,6 +190,22 @@ const BlogEditor = () => {
                   onChange={(e) => handleInputChange("domain", e.target.value)}
                   className="text-lg font-poppins"
                 />
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="poweredBy"
+                  checked={formData.poweredByPromotionocean}
+                  onCheckedChange={(checked) => 
+                    setFormData((prev) => ({ ...prev, poweredByPromotionocean: checked === true }))
+                  }
+                />
+                <Label
+                  htmlFor="poweredBy"
+                  className="text-sm font-poppins cursor-pointer"
+                >
+                  Powered by Promotionocean.com
+                </Label>
               </div>
 
               <div className="space-y-2">
