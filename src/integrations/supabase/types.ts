@@ -27,6 +27,7 @@ export type Database = {
           monthly_visits: number
           overview: string
           perfect_for: string[]
+          powered_by_promotionocean: boolean
           price: string
           screenshot_urls: string[]
           secondary_blog: string
@@ -48,6 +49,7 @@ export type Database = {
           monthly_visits: number
           overview: string
           perfect_for?: string[]
+          powered_by_promotionocean?: boolean
           price: string
           screenshot_urls?: string[]
           secondary_blog?: string
@@ -69,6 +71,7 @@ export type Database = {
           monthly_visits?: number
           overview?: string
           perfect_for?: string[]
+          powered_by_promotionocean?: boolean
           price?: string
           screenshot_urls?: string[]
           secondary_blog?: string
